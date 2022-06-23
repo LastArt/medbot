@@ -1,7 +1,6 @@
 package pkg
 
 import (
-	"fmt"
 	"log"
 	"medcalcbot/calculators"
 	"medcalcbot/set"
@@ -88,7 +87,6 @@ func TgBotCreate() {
 				default:
 					x := CheckRequest(update.Message.Text)
 					result := norms.Search(x)
-					fmt.Println("\nЧто получает X = ", x)
 					prefix := tgbotapi.NewMessage(update.Message.Chat.ID, warnings.ShowinBot(set.NormsPrefix)+" по запросу - "+update.Message.Text+"\n---------\n")
 					bot.Send(prefix)
 					msg := tgbotapi.NewMessage(update.Message.Chat.ID, result)
