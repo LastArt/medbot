@@ -78,7 +78,7 @@ func DbConnect() {
 }
 
 func BotApiKey() string {
-	file, err := os.Open("./set/config.json")
+	file, err := os.Open("set/config.json")
 	if err != nil {
 		panic(err.Error())
 	}
@@ -92,7 +92,7 @@ func BotApiKey() string {
 }
 
 func LogJournalPath() string {
-	file, err := os.Open("./set/config.json")
+	file, err := os.Open("set/config.json")
 	if err != nil {
 		panic(err.Error())
 	}
