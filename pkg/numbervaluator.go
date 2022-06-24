@@ -34,7 +34,7 @@ func NumberValuator(msgInput string) []float64 {
 
 func StringValuator(msgInput string) []string {
 	var res = []string{}
-	words := strings.Split(msgInput, "/")
+	words := strings.Split(msgInput, "\\")
 	for _, i := range words {
 		res = append(res, i)
 	}

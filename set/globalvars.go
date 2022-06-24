@@ -27,7 +27,7 @@ var (
 	RomaCalcInfo   string = "RomaCalcInfo"
 )
 
-// Other warnings
+//MAIN warnings
 var (
 	InfoText          string = "InfoText"
 	CalcBackWarning   string = "CalcBackWarning"
@@ -42,8 +42,12 @@ var (
 	ChangeConnString  string = "ChangeConnString"
 	ChangeBotToken    string = "ChangeBotToken"
 	ChangeLogPath     string = "ChangeLogPath"
+	OverTwoSymbols    string = "OverTwoSymbols"
+	NotRuSymbols      string = "NotRuSymbols"
+	HaveNotParametrs  string = "HaveNotParametrs"
 )
 
+// OTHER Warnings
 var (
 	BOT_ERROR_DELETE_USER            string = "BOT_ERROR_DELETE_USER"
 	BOT_ERROR_ADDTODB                string = "BOT_ERROR_ADDTODB"
@@ -54,6 +58,7 @@ var (
 	BOT_WARNING_ADMIN_ACCESS         string = "BOT_WARNING_ADMIN_ACCESS"
 	BOT_WARNING_EDITUSER_FINE        string = "BOT_WARNING_EDITUSER_FINE"
 	BOT_WARNING_ARGUMENTS_NOT_ENOUGH string = "BOT_WARNING_ARGUMENTS_NOT_ENOUGH"
+	BOT_ADMIN_ENTER_INFO             string = "BOT_ADMIN_ENTER_INFO"
 )
 
 var Calculators = tgbotapi.NewInlineKeyboardMarkup(

@@ -248,21 +248,29 @@ func (r Recomend) Search(inputRecomends string) string {
 	if err != nil {
 		panic(err)
 	}
-	rows, err := db.Query("SELECT id,recom_name, link, type FROM recom WHERE recom_name LIKE ?", "%"+inputRecomends+"%")
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer rows.Close()
+	warnings := new(Warning)
 	var str string
-	rcm := []Recomend{}
-	for rows.Next() {
-		err := rows.Scan(&r.Id, &r.RecomendationName, &r.Link, &r.TypeRecomend)
+	res := CheckRequest(inputRecomends)
+
+	if res == warnings.ShowinBot(set.NotRuSymbols) {
+		str = "Некорректный ввод, пишите русскими буквами!"
+	} else {
+		rows, err := db.Query("SELECT id,recom_name, link, type FROM recom WHERE recom_name LIKE ?", "%"+inputRecomends+"%")
 		if err != nil {
-			log.Println("ОШИБКА - ", err)
-			continue
 		}
-		rcm = append(rcm, r)
-		str += "\n№ " + strconv.Itoa(r.Id) + "\nНозология: " + r.RecomendationName + "\nСсылка: " + r.Link + "\nИсточник: " + r.TypeRecomend + "\n============================\n"
+		defer rows.Close()
+
+		rcm := []Recomend{}
+		for rows.Next() {
+			err := rows.Scan(&r.Id, &r.RecomendationName, &r.Link, &r.TypeRecomend)
+			if err != nil {
+				log.Println("ОШИБКА - ", err)
+				continue
+			}
+			rcm = append(rcm, r)
+			str += "\n№ " + strconv.Itoa(r.Id) + "\nНозология: " + r.RecomendationName + "\nСсылка: " + r.Link + "\nИсточник: " + r.TypeRecomend + "\n============================\n"
+		}
 	}
+
 	return str
 }

@@ -32,7 +32,6 @@ func TgBotCreate() {
 					msg := tgbotapi.NewMessage(update.Message.Chat.ID, "👋 Привет "+userName+"\n"+warnings.ShowinBot(set.IntroductionInfo))
 					bot.Send(msg)
 				case "/help":
-					//Отправлем сообщение
 					repl := warnings.ShowinBot(set.InfoText)
 					msg := tgbotapi.NewMessage(update.Message.Chat.ID, repl)
 					bot.Send(msg)
@@ -47,22 +46,33 @@ func TgBotCreate() {
 					bot.Send(msg)
 					for update := range updates {
 						if update.Message != nil {
-							x := recomends.Search(CheckRequest(update.Message.Text))
-							prefix := tgbotapi.NewMessage(update.Message.Chat.ID, warnings.ShowinBot(set.ReccomendPrefix)+" по запросу - "+update.Message.Text+"\n---------\n")
-							bot.Send(prefix)
-							msg = tgbotapi.NewMessage(update.Message.Chat.ID, x)
-							bot.Send(msg)
-							break
-						} else {
-							msg := tgbotapi.NewMessage(update.Message.Chat.ID, "По Вашему запросу - "+update.Message.Text+"\n️❌ Увы, ничего не найдено!\n---------\n")
-							bot.Send(msg)
+							if update.Message.Text != "в" {
+								r := CheckRequest(update.Message.Text)
+								if r == warnings.ShowinBot(set.OverTwoSymbols) {
+									msg := tgbotapi.NewMessage(update.Message.Chat.ID, r)
+									bot.Send(msg)
+								} else if r == warnings.ShowinBot(set.NotRuSymbols) {
+									msg := tgbotapi.NewMessage(update.Message.Chat.ID, r)
+									bot.Send(msg)
+								} else {
+									r := CheckRequest(update.Message.Text)
+									result := recomends.Search(r)
+									prefix := tgbotapi.NewMessage(update.Message.Chat.ID, warnings.ShowinBot(set.ReccomendPrefix)+" по запросу - \n\n"+r+"\n\n"+result+"\n\n\n"+warnings.ShowinBot(set.CalcBackWarning))
+									bot.Send(prefix)
+								}
+							} else {
+								msg := tgbotapi.NewMessage(update.Message.Chat.ID, warnings.ShowinBot(set.ExitNoti))
+								bot.Send(msg)
+								break
+							}
+
 						}
 					}
 				case "/medconf": //TODO Функция вызывающая кнопки по разделам медицины, а далее запускающая скраппинг по сайту медконференций в нужном разделе
 					msg := tgbotapi.NewMessage(update.Message.Chat.ID, warnings.ShowinBot(set.UnderConstruction))
 					bot.Send(msg)
 				case "/settings": // Доступ которым в последствие возможно будет управлять ботом (организовать через инлайн батоны)
-					msg := tgbotapi.NewMessage(update.Message.Chat.ID, "🔐 Для авторизации ведите логин и пароль через / без пробелов\nНапример: admin/password")
+					msg := tgbotapi.NewMessage(update.Message.Chat.ID, warnings.ShowinBot(set.BOT_ADMIN_ENTER_INFO))
 					bot.Send(msg)
 					for upd := range updates {
 						msgIn := upd.Message.Text
@@ -85,11 +95,18 @@ func TgBotCreate() {
 						}
 					}
 				default:
+					msg := tgbotapi.NewMessage(update.Message.Chat.ID, "")
 					x := CheckRequest(update.Message.Text)
 					result := norms.Search(x)
+					//prefix := tgbotapi.NewMessage(update.Message.Chat.ID, warnings.ShowinBot(set.NormsPrefix)+" по запросу - "+update.Message.Text+"\n---------\n")
+					//bot.Send(prefix)
+					if x != warnings.ShowinBot(set.NotRuSymbols) || x != warnings.ShowinBot(set.OverTwoSymbols) {
+						msg = tgbotapi.NewMessage(update.Message.Chat.ID, x)
+						bot.Send(msg)
+					}
 					prefix := tgbotapi.NewMessage(update.Message.Chat.ID, warnings.ShowinBot(set.NormsPrefix)+" по запросу - "+update.Message.Text+"\n---------\n")
 					bot.Send(prefix)
-					msg := tgbotapi.NewMessage(update.Message.Chat.ID, result)
+					msg = tgbotapi.NewMessage(update.Message.Chat.ID, result)
 					bot.Send(msg)
 				}
 			} else {
